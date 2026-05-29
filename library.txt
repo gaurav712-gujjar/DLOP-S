@@ -1,0 +1,15 @@
+import os -- 
+import operating system
+
+
+from pathlib import Path --> 
+pathlib is a built-in Python module used to work with file and folder paths in an easy and modern way.
+
+
+import logging --->
+logging is a built-in Python module used to show messages about what your program is doing
+
+
+src --->
+usually means source code folder in a project.
+It is a directory where we keep the main Python code files.
