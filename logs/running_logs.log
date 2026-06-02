@@ -31,3 +31,13 @@ Expires: Fri, 29 May 2026 11:58:07 GMT
 Source-Age: 0
 
 ]
+[2026-06-02 16:59:31,099: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-02 16:59:31,110: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-02 16:59:31,143: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-02 16:59:31,146: INFO: common: created directory at: artifacts]
+[2026-06-02 16:59:31,147: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-02 16:59:31,149: INFO: data_ingestion: File already exists of size: ~ 11345 KB]
+[2026-06-02 16:59:32,498: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+

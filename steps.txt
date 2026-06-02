@@ -1,3 +1,4 @@
+DAY-1
 
 create uv venv
 
@@ -10,7 +11,9 @@ src > classifier > constants >  __init__.py
 
 run main.py 
 
+
 =====================================================================
+DAY-2
 
 requirements.txt added and install 
 
@@ -23,6 +26,34 @@ params.yaml file updated
 
 
 research > data_ingestion.ipynb file 
+
+=======================================================================
+DAY-3
+
+Create a new file 'config_entity.py' in entity folder  and wrtie class DataIngestionConfig
+
+
+Update the configuration Manager in src config 
+In config ---> configuration.py 
+and write details from research ---> data_ingestion.ipynb file 
+
+
+
+Update the components 
+Create a file in components folder ---> data_ingestion.py 
+and write details from research ---> data_ingestion.py file 
+
+
+Update the Pipeline 
+In Pipeline folder -->> create new file 'stage_01_data_ingestion.py' 
+
+
+
+Update the main.py 
+Now run python main.py  and we will see in artifacts folder data unzip and runnig all process . 
+
+
+
 
 
 
