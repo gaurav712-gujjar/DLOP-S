@@ -41,3 +41,46 @@ Source-Age: 0
 
 x==========x]
 
+[2026-06-03 16:59:26,751: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-03 16:59:26,763: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-03 16:59:26,770: INFO: common: created directory at: artifacts]
+[2026-06-03 16:59:26,775: INFO: common: created directory at: artifacts/prepare_base_model]
+[2026-06-03 16:59:53,855: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-03 16:59:54,362: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-03 16:59:54,708: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-03 17:13:01,925: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-03 17:13:01,933: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-03 17:13:01,939: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-03 17:13:01,944: INFO: common: created directory at: artifacts]
+[2026-06-03 17:13:01,946: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-03 17:13:01,948: INFO: data_ingestion: File already exists of size: ~ 11345 KB]
+[2026-06-03 17:13:03,242: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+[2026-06-03 17:13:03,243: INFO: main: >>>>>> Prepare Base Model started <<<<<<]
+[2026-06-03 17:13:03,244: ERROR: main: name 'PrepareBaseModelTrainingPipeline' is not defined]
+Traceback (most recent call last):
+  File "D:\DLOPS\main.py", line 23, in <module>
+    prepare_base_model = PrepareBaseModelTrainingPipeline()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'PrepareBaseModelTrainingPipeline' is not defined
+[2026-06-03 17:14:05,950: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-03 17:14:05,956: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-03 17:14:05,960: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-03 17:14:05,961: INFO: common: created directory at: artifacts]
+[2026-06-03 17:14:05,964: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-03 17:14:05,966: INFO: data_ingestion: File already exists of size: ~ 11345 KB]
+[2026-06-03 17:14:07,114: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+[2026-06-03 17:14:07,115: INFO: main: >>>>>> Prepare Base Model started <<<<<<]
+[2026-06-03 17:14:07,120: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-03 17:14:07,126: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-03 17:14:07,129: INFO: common: created directory at: artifacts]
+[2026-06-03 17:14:07,131: INFO: common: created directory at: artifacts/prepare_base_model]
+[2026-06-03 17:14:08,592: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-03 17:14:09,218: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-03 17:14:09,349: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-03 17:14:10,041: INFO: main: >>>>>> Prepare Base Model completed <<<<<<
+
+x==========x]
