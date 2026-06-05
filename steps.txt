@@ -81,6 +81,25 @@ folder Pipeline ---> create new file 'stage_02_prepare_base_model.py'
 For run this , we have to add this stage_02 in main.py 
 from src.cnnClassifier.pipeline.stage_02_prepare_base_model import PrepareBaseModelTrainingPipeline
 
+-------------------------------------------------------------------------------------------------------
+day - 5
+
+Now add prepare_callbacks in config.yaml 
+
+Now create file '03_prepare_callbacks.ipynb' in 'research' folder ---> and write in this.
+
+
+Now add prepare_callbacks_config dataclass into 'entity' folder ---> 'config_entity.py' 
+
+
+Now add 'get_prepare_callback_config' function  into config folder in 'configuration.py' 
+
+
+Now update the "config_entity" file in entity folder 
+
+
+Now go to 'components' folder ---> create file 'prepare_callbacks.py' 
+
 
 
 
