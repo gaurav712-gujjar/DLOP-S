@@ -100,6 +100,28 @@ Now update the "config_entity" file in entity folder
 
 Now go to 'components' folder ---> create file 'prepare_callbacks.py' 
 
+-------------------------------------------------------------------------------------------------
+Day - 6
+
+
+Add training-directory in config.yaml file 
+
+Now create 'training.ipynb' file into research folder . 
+
+Now go to entity folder ---> config_entity file ---> add TrainingConfig Class  . 
+
+
+Now in config folder ----> configuration.py file ---> add get_training_config function . 
+
+
+Now in components folder ---> create training.py 
+
+
+Now in Pipeline folder ----> create stage_03_training.py 
+
+Now run python main.py 
+
+
 
 
 
