@@ -1,193 +1,98 @@
-# 🧠 CNN Image Classifier — DLOps Assignment 1
+# 🧠 CNN Image Classifier — DLOps Pipeline
 
-This project is an **end-to-end Deep Learning pipeline** built following **DLOps (Deep Learning Operations)** principles. It implements a CNN (Convolutional Neural Network) image classifier that is modular, scalable, and reproducible.
+End-to-end TensorFlow/Keras CNN pipeline (chicken fecal image classifier: Healthy vs Coccidiosis) built with DVC versioning, a Flask web app, and CI/CD via GitHub Actions.
 
----
+## Root files
 
-## 📌 Why Are We Building This?
+| File | Purpose |
+|---|---|
+| `app.py` | Flask web server. Routes: `/` (UI), `/train` (re-runs `main.py` via OS call), `/predict` (decodes base64 image, runs `PredictionPipeline`). |
+| `main.py` | Master entry point — runs all 4 pipeline stages (ingestion → base model → training → evaluation) in sequence with logging/error handling. |
+| `template.py` | One-time scaffolding script that creates the project's folder/file skeleton (used at project setup, not in normal runs). |
+| `setup.py` | Package install config (currently empty/placeholder). |
+| `dockerfile` | Builds a container image: Python 3.9-slim, installs `awscli` + `requirements.txt`, runs `app.py`. |
+| `requirements.txt` | Pip dependencies (tensorflow, dvc, Flask, Flask-Cors, python-box, pyyaml, joblib, etc.). |
+| `pyproject.toml` | `uv`/PEP 621 project metadata (separate, minimal dependency list — `tensorboard`). |
+| `uv.lock` | Locked dependency versions for `uv` package manager. |
+| `.python-version` | Pins Python version (`3.11`) for `uv venv`. |
+| `params.yaml` | Model hyperparameters: image size, batch size, epochs, learning rate, augmentation flag, etc. Read by DVC stages. |
+| `dvc.yaml` | DVC pipeline definition — 4 stages (data_ingestion, prepare_base_model, training, evaluation) with deps/params/outs for reproducible runs. |
+| `dvc.lock` | DVC's lock file recording exact hashes of deps/outputs from the last pipeline run. |
+| `.dvcignore` | Patterns DVC should ignore (like `.gitignore` for DVC). |
+| `.dvc/config`, `.dvc/.gitignore` | DVC internal config and ignore rules. |
+| `library.txt` | Personal notes explaining basic Python imports (`os`, `pathlib`, `logging`) used in the project — learning reference, not code. |
+| `steps.txt` | Day-by-day build log/journal documenting how the project was developed incrementally. |
+| `.gitignore` | Git-ignored paths (envs, caches, etc.). |
+| `inputImage.jpg` | Sample/last image submitted to `/predict` for inference. |
+| `ouptut_result.json` | Sample prediction output saved from a manual test run. |
+| `scores.json` | Evaluation metrics (loss, accuracy) written by the evaluation stage — tracked as a DVC metric. |
+| `logs/running_logs.log` | Runtime log file written by the project-wide logger. |
 
-In the real world, just training a model is not enough. A proper ML project needs:
+## `.github/workflows/`
 
-- **Reproducibility** — anyone, anywhere should be able to get the same results
-- **Modularity** — clean, maintainable code (research code separate from production code)
-- **Version Control** — track data and models with DVC, not just code with Git
-- **Automation** — CI/CD pipeline via GitHub Actions so every commit is automatically tested
-- **Scalability** — if data grows or the model changes tomorrow, update just one place
+| File | Purpose |
+|---|---|
+| `main.yaml` | CI/CD pipeline: on push to `main` runs lint/test stub jobs, then a (partially defined) "build-and-push-ecr-image" job for deployment. |
+| `.gitkeep` | Empty placeholder to keep the otherwise-empty folder tracked by Git. |
 
-**The goal is to learn how to build a proper ML system, not just a model.**
+## `config/`
 
----
+| File | Purpose |
+|---|---|
+| `config.yaml` | Central config: artifact paths, dataset source URL, model/checkpoint paths for every pipeline stage. This is the **active** config read by `ConfigurationManager`. |
 
-## 🗂️ Project Structure
+## `src/cnnClassifier/` — main package
 
-```
-dlops_ba_a1/
-├── .github/workflows/       # CI/CD pipeline (GitHub Actions)
-├── artifacts/
-│   └── data_ingestion/      # Downloaded & unzipped data stored here
-├── config/
-│   └── config.yaml          # Data source URL, paths — all config here
-├── logs/                    # Runtime logs
-├── research/
-│   └── data_ingestion.ipynb # Experiment/prototype notebook
-├── src/cnnClassifier/
-│   ├── components/          # Core logic (data_ingestion.py, etc.)
-│   ├── config/              # ConfigurationManager
-│   ├── constants/           # Paths to config files
-│   ├── entity/              # Dataclasses (config entities)
-│   ├── pipeline/            # Stage-wise pipeline files
-│   └── utils/               # Helper functions (read_yaml, create_dirs)
-├── templates/               # HTML templates (for web app)
-├── main.py                  # Entry point — all stages run from here
-├── dvc.yaml                 # DVC pipeline definition
-├── params.yaml              # Model hyperparameters
-├── requirements.txt         # Python dependencies
-└── setup.py                 # Package install config
-```
+| File | Purpose |
+|---|---|
+| `__init__.py` | Sets up the project-wide logger (writes to `logs/running_logs.log` and stdout). |
+| `constants/__init__.py` | Defines fixed paths to `config.yaml` and `params.yaml`. |
+| `utils/common.py` | Shared helpers: `read_yaml`, `create_directories`, `save_json`/`load_json`, `save_bin`/`load_bin`, `get_size`, and base64 encode/decode for images (used by Flask app). |
+| `entity/config_entity.py` | Frozen dataclasses defining the config schema for each stage: `DataIngestionConfig`, `PrepareBaseModelConfig`, `PrepareCallbacksConfig`, `TrainingConfig`, `EvaluationConfig`. |
+| `config/configuration.py` | `ConfigurationManager` class — reads `config.yaml`/`params.yaml` and builds the typed config-entity object for each stage. |
+| `config/config.yaml` | **Stale duplicate** of the root `config/config.yaml` (missing the `prepare_callbacks` section) — not actually read by the app; the constants point to the root-level file. |
+| `pipeline/configuration.py` | Empty placeholder file. |
+| `pipeline/stage_01_data_ingestion.py` | Pipeline wrapper: downloads dataset zip and extracts it via the `DataIngestion` component. |
+| `pipeline/stage_02_prepare_base_model.py` | Pipeline wrapper: builds VGG16 base model and adapts it (adds classification head) via `PrepareBaseModel`. |
+| `pipeline/stage_03_training.py` | Pipeline wrapper: sets up TensorBoard/checkpoint callbacks and trains the model via `Training`. |
+| `pipeline/stage_04_evaluation.py` | Pipeline wrapper: loads the trained model, evaluates on validation data, saves metrics via `Evaluation`. |
+| `pipeline/predict.py` | `PredictionPipeline` — loads the trained model and classifies a single input image as `Healthy` or `Coccidiosis`. Used by Flask's `/predict` route. |
+| `components/data_ingestion.py` | `DataIngestion` — downloads the dataset zip (if not present) and extracts it to `artifacts/data_ingestion/`. |
+| `components/prepare_base_model.py` | `PrepareBaseModel` — loads pretrained VGG16, freezes layers, attaches a dense softmax classification head, compiles and saves it. |
+| `components/prepare_callbacks.py` | `PrepareCallback` — builds Keras `TensorBoard` and `ModelCheckpoint` callbacks for training. |
+| `components/training.py` | `Training` — sets up train/validation `ImageDataGenerator`s (with optional augmentation), compiles, fits, and saves the final model. |
+| `components/evaluation.py` | `Evaluation` — runs the trained model against a validation split and writes loss/accuracy to `scores.json`. |
 
----
+## `research/` — prototyping notebooks
 
-## ⚙️ How the Project Works — Step by Step
+| File | Purpose |
+|---|---|
+| `trials.ipynb` | General scratchpad/experiments notebook. |
+| `data_ingestion.ipynb` | Prototype of the data download/extraction logic before it was converted into `data_ingestion.py`. |
+| `prepare_base_model.ipynb` | Prototype of VGG16 base-model setup before conversion to `prepare_base_model.py`. |
+| `03_prepare_callbacks.ipynb` | Prototype of TensorBoard/checkpoint callback setup. |
+| `training.ipynb` | Prototype of the training loop before conversion to `training.py`. |
+| `evaluation.ipynb` | Prototype of the model evaluation logic before conversion to `evaluation.py`. |
 
-### Step 1: Environment Setup
-```bash
-uv venv
-```
-**Why?** Every project should have its own isolated environment so dependencies don't conflict.
+## `templates/`
 
----
+| File | Purpose |
+|---|---|
+| `index.html` | Front-end page served at `/` — image upload UI that calls the Flask `/predict` (and `/train`) endpoints. |
 
-### Step 2: Generate Project Template
-```bash
-python template.py
-```
-**Why?** This script creates all folders and empty files at once. Creating them manually every time is error-prone.
+## `artifacts/` — generated outputs (not source code)
 
----
+| Path | Purpose |
+|---|---|
+| `data_ingestion/data.zip` | Downloaded raw dataset archive. |
+| `data_ingestion/Chicken-fecal-images/Coccidiosis/*.jpg`, `.../Healthy/*.jpg` | Extracted, labeled training images (two classes). |
+| `prepare_callbacks/checkpoint_dir/model.h5` | Best-checkpointed model saved during training. |
+| `prepare_callbacks/tensorboard_log_dir/.../events.out.tfevents...` | TensorBoard logs from multiple training runs. |
+| `training/.gitignore` | Excludes the large trained model file (`model.h5`) from Git. |
+| `.gitignore` (top-level in `artifacts/`) | Excludes generated artifacts from Git (versioned by DVC instead). |
 
-### Step 3: Define Constants
-`src/cnnClassifier/constants/__init__.py` defines the paths to `config.yaml` and `params.yaml`.
+## Notes
 
-**Why?** Hard-coding paths inside business logic is bad practice. Manage them from one place.
-
----
-
-### Step 4: Write Utilities
-`src/utils/common.py` contains reusable helper functions:
-- `read_yaml()` — reads YAML config files
-- `create_directories()` — creates folders programmatically
-
-**Why?** These tasks are needed repeatedly — keep them in one reusable place.
-
----
-
-### Step 5: Define Config
-`config/config.yaml` holds:
-- Data download URL
-- Zip file path
-- Unzip destination
-
-**Why?** Keep configuration separate from code — if the URL changes tomorrow, update only the YAML, not the code.
-
----
-
-### Step 6: Research Notebook
-`research/data_ingestion.ipynb` — write and test code experimentally first.
-
-**Why?** Notebooks let you freely try and fail. Once everything works, convert it into clean production code.
-
----
-
-### Step 7: Entity (Config Dataclass)
-Create `DataIngestionConfig` dataclass in `src/entity/config_entity.py`.
-
-**Why?** Using structured config objects gives type safety and IDE autocomplete support.
-
----
-
-### Step 8: Configuration Manager
-Create `ConfigurationManager` class in `src/config/configuration.py` — it reads the YAML and returns a config entity.
-
-**Why?** Single Responsibility Principle — one class handles all config loading.
-
----
-
-### Step 9: Build the Component
-`src/components/data_ingestion.py` contains the actual logic:
-- Download data
-- Extract zip
-- Save to `artifacts/data_ingestion/`
-
-**Why?** Business logic should live in its own component — easy to test and swap out.
-
----
-
-### Step 10: Build the Pipeline Stage
-`src/pipeline/stage_01_data_ingestion.py` — wraps the full flow of one stage into a class.
-
-**Why?** Each stage (ingestion, training, evaluation) should be an independent, runnable unit.
-
----
-
-### Step 11: Main Entry Point
-All stages are called sequentially in `main.py`.
-
-```bash
-python main.py
-```
-
-After running, you'll see the downloaded and unzipped data in `artifacts/data_ingestion/`.
-
-**Why?** The entire pipeline runs with a single command — that's the whole point of automation.
-
----
-
-## 🔧 Installation
-
-```bash
-git clone https://github.com/1602saurab/dlops_ba_a1.git
-cd dlops_ba_a1
-
-uv venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-pip install -e .
-```
-
----
-
-## ▶️ Run
-
-```bash
-python main.py
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Tool | Purpose |
-|------|---------|
-| Python | Core language |
-| TensorFlow/Keras | CNN model |
-| DVC | Data & pipeline versioning |
-| GitHub Actions | CI/CD automation |
-| uv | Fast virtual environment |
-| PyYAML | Config file parsing |
-
----
-
-## 📊 Pipeline Stages (DVC)
-
-```
-Data Ingestion → [Model Training] → [Evaluation] → [Deployment]
-```
-*(This assignment covers Stage 1 — Data Ingestion)*
-
----
-
-## 💡 Key Takeaway
-
-> Writing `model.fit()` is not ML engineering.  
-> Real DLOps means: **modular code + config management + versioning + automation**.
+- The pipeline currently has 4 stages implemented (ingestion, base model prep, training, evaluation); `dvc.yaml` defines all 4 as reproducible DVC stages.
+- `params.yaml` controls hyperparameters without touching code; `config/config.yaml` controls paths/URLs the same way.
+- `src/cnnClassifier/config/config.yaml` is a leftover/duplicate and can likely be deleted — the live config lives at the repo-root `config/config.yaml`.
