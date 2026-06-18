@@ -91,6 +91,41 @@ End-to-end TensorFlow/Keras CNN pipeline (chicken fecal image classifier: Health
 | `training/.gitignore` | Excludes the large trained model file (`model.h5`) from Git. |
 | `.gitignore` (top-level in `artifacts/`) | Excludes generated artifacts from Git (versioned by DVC instead). |
 
+## Workflow
+
+### CI/CD — `.github/workflows/main.yaml`
+
+Triggers on every push to `main` (except README-only changes). Three sequential jobs:
+
+| Job | Runs on | What it does |
+|---|---|---|
+| `integration` (Continuous Integration) | `ubuntu-latest` | Checks out code, runs placeholder lint/test steps (currently just `echo` stubs). |
+| `build-and-push-ecr-image` (Continuous Delivery) | `ubuntu-latest` | Needs `integration` to pass. Configures AWS credentials, logs into Amazon ECR, builds the Docker image (`dockerfile`) and pushes it to ECR as `latest`. |
+| `Continuous-Deployment` | `self-hosted` | Needs the image-push job. Pulls the latest ECR image, stops/removes any running `cnncls` container, then runs a fresh container exposing port `8080` with AWS env vars injected, and prunes unused Docker resources. |
+
+Requires these GitHub secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `ECR_REPOSITORY_NAME`.
+
+### DVC pipeline — `dvc.yaml`
+
+```
+data_ingestion → prepare_base_model → training → evaluation
+```
+
+| Stage | Command | Depends on | Produces |
+|---|---|---|---|
+| `data_ingestion` | `stage_01_data_ingestion.py` | `config/config.yaml` | `artifacts/data_ingestion/Chicken-fecal-images/` |
+| `prepare_base_model` | `stage_02_prepare_base_model.py` | `config/config.yaml`, params (`IMAGE_SIZE`, `INCLUDE_TOP`, `CLASSES`, `WEIGHTS`, `LEARNING_RATE`) | `artifacts/prepare_base_model/` |
+| `training` | `stage_03_training.py` | ingestion + base-model outputs, params (`IMAGE_SIZE`, `EPOCHS`, `BATCH_SIZE`, `AUGMENTATION`, `LEARNING_RATE`) | `artifacts/training/model.h5` |
+| `evaluation` | `stage_04_evaluation.py` | ingestion + trained model, params (`IMAGE_SIZE`, `BATCH_SIZE`) | `scores.json` (tracked metric) |
+
+Run the whole thing with `dvc repro` (re-runs only stages whose deps/params changed) or end-to-end manually with `python main.py`.
+
+### App runtime workflow
+
+1. `app.py` starts Flask, serves `templates/index.html` at `/`.
+2. `/train` → shells out to `python main.py`, re-running all 4 stages.
+3. `/predict` → decodes a base64 image (`utils/common.decodeImage`), runs `PredictionPipeline` (`pipeline/predict.py`) against `artifacts/training/model.h5`, returns `Healthy` or `Coccidiosis` as JSON.
+
 ## Notes
 
 - The pipeline currently has 4 stages implemented (ingestion, base model prep, training, evaluation); `dvc.yaml` defines all 4 as reproducible DVC stages.
