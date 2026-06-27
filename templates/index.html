@@ -3,22 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fito Image Classification</title>
+<title>Brain Tumor Detection</title>
 
-<link rel="stylesheet"
-href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body{
     font-family:'Poppins',sans-serif;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    background:linear-gradient(135deg,#0a0a0a,#1a1a2e,#16213e);
     min-height:100vh;
     color:#fff;
 }
 
-h3 span{color:#ff9800;}
+h3 span{color:#e94560;}
 
 .card-ui{
     background:rgba(255,255,255,0.08);
@@ -54,8 +52,7 @@ h3 span{color:#ff9800;}
 }
 
 .btn-upload{background:#2196f3;color:#fff;}
-.btn-predict{background:#4caf50;color:#fff;}
-
+.btn-predict{background:#e94560;color:#fff;}
 .btn-custom:hover{opacity:.9}
 
 .result-box{
@@ -64,16 +61,23 @@ h3 span{color:#ff9800;}
     border-radius:12px;
     padding:10px;
     overflow:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
+
+.result-label{
+    font-size:24px;
+    font-weight:700;
+    text-align:center;
+}
+
+.tumor { color:#e94560; }
+.no-tumor { color:#4caf50; }
 
 pre{
     color:#00e5ff;
     font-size:14px;
-}
-
-.resp-img{
-    max-width:100%;
-    border-radius:10px;
 }
 
 #loading{
@@ -90,7 +94,7 @@ pre{
     width:60px;
     height:60px;
     border:6px solid #555;
-    border-top:6px solid #ff9800;
+    border-top:6px solid #e94560;
     border-radius:50%;
     animation:spin 1s linear infinite;
 }
@@ -105,39 +109,37 @@ pre{
 
 <div class="container py-5">
 
-<h3 class="text-center mb-4">
-    Image Classification by <span>Fito</span>
+<h3 class="text-center mb-2">
+    🧠 Brain Tumor <span>Detection</span>
 </h3>
+<p class="text-center text-muted mb-4">Upload a Brain MRI image to detect tumor</p>
 
 <div class="row">
 
 <!-- LEFT -->
 <div class="col-md-6 mb-4">
     <div class="card-ui text-center">
-
+        <p class="mb-2">Upload MRI Image</p>
         <div class="image-box mb-3">
             <video autoplay id="video"></video>
             <img id="photo">
             <canvas id="canvas" style="display:none;"></canvas>
         </div>
 
-        <button class="btn btn-custom btn-upload mr-2" id="uload">Upload Image</button>
-        <button class="btn btn-custom btn-predict" id="send">Predict</button>
+        <button class="btn btn-custom btn-upload mr-2" id="uload">📁 Upload Image</button>
+        <button class="btn btn-custom btn-predict" id="send">🔍 Predict</button>
 
-        <!-- BACKEND CONFIG (UNCHANGED) -->
         <input type="hidden" id="url" value="../predict">
-        <input type="file" id="fileinput" hidden>
-
+        <input type="file" id="fileinput" hidden accept="image/*">
     </div>
 </div>
 
 <!-- RIGHT -->
 <div class="col-md-6">
     <div class="card-ui">
-        <h5 class="text-center mb-3">Prediction Output</h5>
-        <div class="row">
-            <div class="col-md-5 result-box text-center" id="imgResult"></div>
-            <div class="col-md-7 result-box" id="jsonResult"></div>
+        <h5 class="text-center mb-3">Prediction Result</h5>
+        <div class="result-box" id="jsonResult">
+            <p class="text-muted">Result will appear here...</p>
         </div>
     </div>
 </div>
@@ -163,14 +165,19 @@ function sendRequest(base64Data){
         contentType: "application/json",
         data: JSON.stringify({ image: base64Data }),
         success: function(res){
+            let label = res[0].image;
+            let cssClass = label === "Tumor Detected" ? "tumor" : "no-tumor";
+            let icon = label === "Tumor Detected" ? "⚠️" : "✅";
 
-            $("#jsonResult").html("<pre>"+JSON.stringify(res[0],null,2)+"</pre>");
-
-            if(res[1]?.image){
-                $("#imgResult").html(
-                    "<img class='resp-img' src='data:image/jpeg;base64,"+res[1].image+"'>"
-                );
-            }
+            $("#jsonResult").html(
+                "<div class='result-label " + cssClass + "'>" +
+                icon + "<br>" + label +
+                "</div>"
+            );
+            $("#loading").hide();
+        },
+        error: function(){
+            $("#jsonResult").html("<p class='text-danger'>Error occurred. Try again.</p>");
             $("#loading").hide();
         }
     });

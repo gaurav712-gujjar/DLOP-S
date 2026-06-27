@@ -376,3 +376,181 @@ x==========x]
 [2026-06-16 02:09:30,363: INFO: _internal: 127.0.0.1 - - [16/Jun/2026 02:09:30] "POST /predict HTTP/1.1" 200 -]
 [2026-06-16 02:09:39,981: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
 [2026-06-16 02:09:41,388: INFO: _internal: 127.0.0.1 - - [16/Jun/2026 02:09:41] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:21:29,393: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-28 00:21:29,428: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:21:29,455: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:21:29,457: INFO: common: created directory at: artifacts]
+[2026-06-28 00:21:29,458: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-28 00:22:12,103: INFO: data_ingestion: artifacts\data_ingestion\data.zip download! with following info: 
+content-type: application/zip
+accept-ranges: bytes
+content-disposition: inline; filename*=UTF-8''brain%2520tumer.zip; filename="brain%20tumer.zip";
+etag: "77115598a3a29e951a02e90b5ac881b25d0a4a55cb9991da9c77da52b96205a5"
+access-control-allow-headers: Content-Range, Content-Type, Content-Disposition, ETag
+access-control-expose-headers: *
+content-length: 65857276
+vary: origin, access-control-request-method, access-control-request-headers
+access-control-allow-origin: *
+x-request-id: 01KW56S1PBM73W85D75S4NK683
+x-hf-cdn-pop: aws-ap-southeast-1
+date: Sat, 27 Jun 2026 18:51:52 GMT
+alt-svc: h3=":443";ma=60;
+connection: close
+
+]
+[2026-06-28 00:22:17,151: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+[2026-06-28 00:22:17,151: INFO: main: >>>>>> Prepare Base Model started <<<<<<]
+[2026-06-28 00:22:17,159: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:22:17,163: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:22:17,164: INFO: common: created directory at: artifacts]
+[2026-06-28 00:22:17,165: INFO: common: created directory at: artifacts/prepare_base_model]
+[2026-06-28 00:22:19,125: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:22:19,559: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-28 00:22:19,785: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:22:20,079: INFO: main: >>>>>> Prepare Base Model completed <<<<<<
+
+x==========x]
+[2026-06-28 00:22:20,080: INFO: main: >>>>>> Training started <<<<<<]
+[2026-06-28 00:22:20,083: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:22:20,087: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:22:20,089: INFO: common: created directory at: artifacts]
+[2026-06-28 00:22:20,090: INFO: common: created directory at: artifacts\prepare_callbacks\checkpoint_dir]
+[2026-06-28 00:22:20,091: INFO: common: created directory at: artifacts\prepare_callbacks\tensorboard_log_dir]
+[2026-06-28 00:22:20,104: INFO: common: created directory at: artifacts\training]
+[2026-06-28 00:22:20,546: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:22:20,584: ERROR: main: [WinError 3] The system cannot find the path specified: 'artifacts\\data_ingestion\\Chicken-fecal-images']
+Traceback (most recent call last):
+  File "D:\DLOPS\main.py", line 38, in <module>
+    model_trainer.main()
+  File "D:\DLOPS\src\cnnClassifier\pipeline\stage_03_training.py", line 24, in main
+    training.train_valid_generator()
+  File "D:\DLOPS\src\cnnClassifier\components\training.py", line 43, in train_valid_generator
+    self.valid_generator = valid_datagenerator.flow_from_directory(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DLOPS\.venv\Lib\site-packages\keras\src\legacy\preprocessing\image.py", line 1136, in flow_from_directory
+    return DirectoryIterator(
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\DLOPS\.venv\Lib\site-packages\keras\src\legacy\preprocessing\image.py", line 456, in __init__
+    for subdir in sorted(os.listdir(directory)):
+                         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'artifacts\\data_ingestion\\Chicken-fecal-images'
+[2026-06-28 00:26:49,773: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-28 00:26:49,780: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:26:49,784: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:26:49,785: INFO: common: created directory at: artifacts]
+[2026-06-28 00:26:49,787: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-28 00:26:49,788: INFO: data_ingestion: File already exists of size: ~ 64314 KB]
+[2026-06-28 00:26:54,740: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+[2026-06-28 00:26:54,740: INFO: main: >>>>>> Prepare Base Model started <<<<<<]
+[2026-06-28 00:26:54,744: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:26:54,746: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:26:54,747: INFO: common: created directory at: artifacts]
+[2026-06-28 00:26:54,748: INFO: common: created directory at: artifacts/prepare_base_model]
+[2026-06-28 00:26:55,484: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:26:56,055: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-28 00:26:56,101: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:26:56,379: INFO: main: >>>>>> Prepare Base Model completed <<<<<<
+
+x==========x]
+[2026-06-28 00:26:56,379: INFO: main: >>>>>> Training started <<<<<<]
+[2026-06-28 00:26:56,383: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:26:56,386: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:26:56,388: INFO: common: created directory at: artifacts]
+[2026-06-28 00:26:56,389: INFO: common: created directory at: artifacts\prepare_callbacks\checkpoint_dir]
+[2026-06-28 00:26:56,390: INFO: common: created directory at: artifacts\prepare_callbacks\tensorboard_log_dir]
+[2026-06-28 00:26:56,406: INFO: common: created directory at: artifacts\training]
+[2026-06-28 00:26:56,736: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:41:03,363: INFO: main: >>>>>> Data Ingestion Stage started <<<<<<]
+[2026-06-28 00:41:03,372: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:41:03,595: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:41:03,597: INFO: common: created directory at: artifacts]
+[2026-06-28 00:41:03,598: INFO: common: created directory at: artifacts/data_ingestion]
+[2026-06-28 00:41:19,776: INFO: data_ingestion: artifacts\data_ingestion\data.zip download! with following info: 
+content-type: application/zip
+accept-ranges: bytes
+content-disposition: inline; filename*=UTF-8''brain%2520tumer.zip; filename="brain%20tumer.zip";
+etag: "77115598a3a29e951a02e90b5ac881b25d0a4a55cb9991da9c77da52b96205a5"
+access-control-allow-headers: Content-Range, Content-Type, Content-Disposition, ETag
+access-control-expose-headers: *
+content-length: 65857276
+vary: origin, access-control-request-method, access-control-request-headers
+access-control-allow-origin: *
+x-request-id: 01KW57W7RSXH7RG482E54C20PK
+x-hf-cdn-pop: aws-ap-southeast-1
+date: Sat, 27 Jun 2026 19:11:05 GMT
+alt-svc: h3=":443";ma=60;
+connection: close
+
+]
+[2026-06-28 00:41:26,053: INFO: main: >>>>>> Data Ingestion Stage completed <<<<<<
+
+x==========x]
+[2026-06-28 00:41:26,053: INFO: main: >>>>>> Prepare Base Model started <<<<<<]
+[2026-06-28 00:41:26,053: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:41:26,069: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:41:26,070: INFO: common: created directory at: artifacts]
+[2026-06-28 00:41:26,071: INFO: common: created directory at: artifacts/prepare_base_model]
+[2026-06-28 00:41:27,641: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:41:28,025: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-28 00:41:28,154: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:41:28,393: INFO: main: >>>>>> Prepare Base Model completed <<<<<<
+
+x==========x]
+[2026-06-28 00:41:28,394: INFO: main: >>>>>> Training started <<<<<<]
+[2026-06-28 00:41:28,398: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:41:28,402: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:41:28,404: INFO: common: created directory at: artifacts]
+[2026-06-28 00:41:28,405: INFO: common: created directory at: artifacts\prepare_callbacks\checkpoint_dir]
+[2026-06-28 00:41:28,410: INFO: common: created directory at: artifacts\prepare_callbacks\tensorboard_log_dir]
+[2026-06-28 00:41:28,412: INFO: common: created directory at: artifacts\training]
+[2026-06-28 00:41:28,864: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:48:28,520: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:48:30,421: WARNING: saving_api: You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. ]
+[2026-06-28 00:48:30,809: INFO: main: >>>>>> Training completed <<<<<<
+
+x==========x]
+[2026-06-28 00:48:30,809: INFO: main: >>>>>> Evaluation started <<<<<<]
+[2026-06-28 00:48:30,855: INFO: common: YAML file config\config.yaml loaded successfully]
+[2026-06-28 00:48:30,863: INFO: common: YAML file params.yaml loaded successfully]
+[2026-06-28 00:48:30,869: INFO: common: created directory at: artifacts]
+[2026-06-28 00:48:31,664: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:49:20,699: INFO: common: json file saved at: scores.json]
+[2026-06-28 00:49:20,733: INFO: main: >>>>>> Evaluation completed <<<<<<
+
+x==========x]
+[2026-06-28 00:54:41,169: INFO: _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.177.29.217:8080]
+[2026-06-28 00:54:41,172: INFO: _internal: [33mPress CTRL+C to quit[0m]
+[2026-06-28 00:54:47,032: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:54:47] "GET / HTTP/1.1" 200 -]
+[2026-06-28 00:54:48,681: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:54:48] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -]
+[2026-06-28 00:55:06,079: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:55:06] "GET / HTTP/1.1" 200 -]
+[2026-06-28 00:55:07,465: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:55:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -]
+[2026-06-28 00:55:35,730: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-28 00:55:35,757: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:55:37,783: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:55:37] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:55:54,511: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:55:55,323: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:55:55] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:56:14,784: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:56:15,336: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:56:15] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:57:52,430: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:57:52] "GET / HTTP/1.1" 200 -]
+[2026-06-28 00:58:24,975: INFO: _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.177.29.217:8080]
+[2026-06-28 00:58:24,976: INFO: _internal: [33mPress CTRL+C to quit[0m]
+[2026-06-28 00:58:30,189: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:58:30] "GET / HTTP/1.1" 200 -]
+[2026-06-28 00:58:40,901: WARNING: config: TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.]
+[2026-06-28 00:58:40,908: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:58:42,432: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:58:42] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:58:56,919: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:58:57,404: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:58:57] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 00:59:05,467: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 00:59:05,983: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 00:59:05] "POST /predict HTTP/1.1" 200 -]
+[2026-06-28 01:00:24,548: WARNING: saving_utils: Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.]
+[2026-06-28 01:00:26,506: INFO: _internal: 127.0.0.1 - - [28/Jun/2026 01:00:26] "POST /predict HTTP/1.1" 200 -]

@@ -3,7 +3,7 @@ artifacts_root: artifacts
 
 data_ingestion:
   root_dir: artifacts/data_ingestion
-  source_URL: https://raw.githubusercontent.com/1602saurab/data_im/main/Chicken-fecal-images%20(2).zip
+  source_URL: https://huggingface.co/datasets/gauravgocher712/brain-tumor-detection/resolve/main/brain%20tumer.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir: artifacts/data_ingestion
 
